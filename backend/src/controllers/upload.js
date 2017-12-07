@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import { System as SystemConfig } from '../config'
+import { System as SystemConfig } from '../config/config.js'
 
 export default (ctx) => {
   // 设置允许跨域的域名称

@@ -6,7 +6,16 @@ import router from './router'
 import store from './store'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import {_apiPost, _apiGet, apiPost, apiGet} from './utils/http.js'
+import utils from './utils/utils.js'
+import lockr from 'lockr'
 Vue.config.productionTip = false
+Vue.prototype.$_post = _apiPost
+Vue.prototype.$post = apiPost
+Vue.prototype.$_get = _apiGet
+Vue.prototype.$get = apiGet
+Vue.prototype.utils = utils
+window.lockr = lockr
 Vue.use(ElementUI)
 /* eslint-disable no-new */
 new Vue({
