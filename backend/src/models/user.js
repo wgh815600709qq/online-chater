@@ -15,9 +15,7 @@ const search = async (params) => {
 }
 
 const login = async (params) => {
-  const res = await User.findOne({where: {username: params.username}})
-  // var password = bcrypt.hashSync(params.password, 8)
-  console.log(bcrypt.compareSync(params.password, res.password))
+  var res = await User.findOne({where: {username: params.username}})
   if (res && bcrypt.compareSync(params.password, res.password)) {
     var token = jwt.sign({username: params.username, password: params.password}, publicKey)
     delete res.password
@@ -37,7 +35,49 @@ const login = async (params) => {
   }
 }
 
+// 查询是否用户名重复
+const checkUserName = async (params) => {
+  var res = await User.findOne({where: {username: params.username}})
+  if (!res) {
+    return {
+      success: true,
+      errCode: 200,
+      errMsg: '可使用'
+    }
+  } else {
+    return {
+      success: false,
+      errCode: 202,
+      errMsg: '用户名已经被注册'
+    }
+  }
+}
+
+// 注册接口
+const register = async (params) => {
+  params.password = bcrypt.hashSync(params.password, 8)
+  if (!params.level) {
+    params.level = 0
+  }
+  var res = await User.create(params)
+  if (res) {
+    return {
+      success: true,
+      errCode: 200,
+      errMsg: '注册成功'
+    }
+  } else {
+    return {
+      success: false,
+      errCode: 201,
+      errMsg: '注册失败'
+    }
+  }
+}
+
 export default {
   search,
-  login
+  login,
+  checkUserName,
+  register
 }

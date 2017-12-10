@@ -7,6 +7,7 @@ import Register from '@/views/settings/register'
 
 // 主页模块
 import Main from '@/views/main'
+import chatRoom from '@/views/chat-room/chat-room'
 Vue.use(Router)
 
 export default new Router({
@@ -26,7 +27,13 @@ export default new Router({
     },
     {
       path: '/main',
-      component: Main
+      component: Main,
+      children: [
+        {
+          path: 'chat-room',
+          component: chatRoom
+        }
+      ]
     }
   ]
 })

@@ -25,3 +25,13 @@ export let Login = async (ctx) => {
   var res = await user.login(ctx.request.body)
   ctx.body = res
 }
+
+export let checkUserName = async (ctx) => {
+  var res = await user.checkUserName(ctx.request.body)
+  ctx.body = res
+}
+
+export let register = async (ctx) => {
+  var res = await user.register(ctx.request.body)
+  ctx.body = res
+}

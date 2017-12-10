@@ -16,67 +16,70 @@
 					<div class="right"><input class="verification" type="text" v-model="verification" placeholder="Input verification"><span class="get-code">{{getCode}}</span></div>
 				</div>
 			</div>
-			<div class="btn" @click="login">Sign in now</div>
+      <div style="display:flex">
+        <div class="btn" @click="login">Login Now.</div>
+        <div class="btn" @click="register">Register Now.</div>
+      </div>
 		</div>
 	</div>
 </template>
 
 <script>
 export default {
-	name: 'login',
-	data () {
-		return {
-			username: '',
-			password: '',
-			verification: '',
-			getCode: '3696'
-		}
-	},
-	methods: {
-		login () {
-			let err = this.check()
-			if (err) {
-				this.$notify.error({
-					title: 'Error',
-					message: err
-				})
-			} else {
-				console.log('pass', this.password)
-				console.log('sss', this.utils.md5Encrypt(this.password))
-				this.$post('/login', {
-					username: this.username,
-					password: this.utils.md5Encrypt(this.password)
-				}).then(res => {
-					console.log('res', res)
-					if (res.data.success) {
-						lockr.set('token', res.data.token)
-						lockr.set('userInfo', res.data.info)
-					}
-				}).catch(err => {
-					console.log('err', err)
-				})
-			}
-		},
-		check () {
-			var err
-			if (!this.username) {
-				err = 'Username cannot be null'
-				return err
-			}
-			if (!this.password) {
-				err = 'Password cannot be null'
-				return err
-			}
-			if (!this.verification) {
-				err = 'Verification cannot be null'
-				return err
-			}
-			if (this.verification !== this.getCode) {
-				err = 'Verification isnot true'
-				return err
-			}
-		}
-	}
+  name: 'login',
+  data () {
+    return {
+      username: '',
+      password: '',
+      verification: '',
+      getCode: '3696'
+    }
+  },
+  methods: {
+    login () {
+      let err = this.check()
+      if (err) {
+        this.$notify.error({
+          title: 'Error',
+          message: err
+        })
+      } else {
+        this.$post('/login', {
+          username: this.username,
+          password: this.utils.md5Encrypt(this.password)
+        }).then(res => {
+          if (res.data.success) {
+            window.lockr.set('token', res.data.token)
+            window.lockr.set('userInfo', res.data.info)
+          }
+        }).catch(err => {
+          console.log('err', err)
+        })
+      }
+    },
+    check () {
+      var err
+      if (!this.username) {
+        err = 'Username cannot be null'
+        return err
+      }
+      if (!this.password) {
+        err = 'Password cannot be null'
+        return err
+      }
+      if (!this.verification) {
+        err = 'Verification cannot be null'
+        return err
+      }
+      if (this.verification !== this.getCode) {
+        err = 'Verification isnot true'
+        return err
+      }
+    },
+    register () { // 注册
+      this.$router.push({path: '/register'})
+    }
+  }
 }
 </script>
 
