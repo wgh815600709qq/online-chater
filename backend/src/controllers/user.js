@@ -21,6 +21,11 @@ export let Get = async (ctx) => {
   }
 }
 
+export let searchById = async (ctx) => {
+  var res = await user.searchById(ctx.query)
+  ctx.body = res
+}
+
 export let Login = async (ctx) => {
   var res = await user.login(ctx.request.body)
   ctx.body = res
@@ -33,5 +38,10 @@ export let checkUserName = async (ctx) => {
 
 export let register = async (ctx) => {
   var res = await user.register(ctx.request.body)
+  ctx.body = res
+}
+
+export let getInfo = async (ctx) => {
+  var res = await user.getInfoByUsername(ctx.query)
   ctx.body = res
 }

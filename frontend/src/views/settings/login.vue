@@ -13,7 +13,7 @@
 				</div>
 				<div class="item">
 					<div class="left">Verification</div>
-					<div class="right"><input class="verification" type="text" v-model="verification" placeholder="Input verification"><span class="get-code">{{getCode}}</span></div>
+					<div class="right"><input class="verification" type="text" v-model="verification" placeholder="Input verification" @keyup.enter="login"><span class="get-code">{{getCode}}</span></div>
 				</div>
 			</div>
       <div style="display:flex">
@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import {mapActions} from 'vuex'
 export default {
   name: 'login',
   data () {
@@ -36,6 +37,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['setToken', 'setMyInfo']),
     login () {
       let err = this.check()
       if (err) {
@@ -48,9 +50,21 @@ export default {
           username: this.username,
           password: this.utils.md5Encrypt(this.password)
         }).then(res => {
+          console.log('111')
           if (res.data.success) {
-            window.lockr.set('token', res.data.token)
-            window.lockr.set('userInfo', res.data.info)
+            this.$message({
+              message: '登陆成功',
+              center: true
+            })
+            this.setToken(res.data.token)
+            this.setMyInfo(res.data.info)
+            this.$router.push('/main')
+          } else {
+            this.$message({
+              message: '登陆失败, 输入信息有误',
+              center: true,
+              type: 'error'
+            })
           }
         }).catch(err => {
           console.log('err', err)

@@ -6,18 +6,18 @@ import {
   System as SystemConfig
 } from './config/config.js'
 import path from 'path'
+import AuthRoutes from './routes/auth-routes.js'
 import MainRoutes from './routes/main-routes'
 import ErrorRoutesCatch from './middleware/ErrorRoutesCatch'
 import ErrorRoutes from './routes/error-routes'
 import jwt from 'koa-jwt'
 import fs from 'fs'
-// import PluginLoader from './lib/PluginLoader'
-
+import './middleware/talkSolvetion.js'
 const app = new Koa2()
+
 const env = process.env.NODE_ENV || 'development' // Current mode
 
 const publicKey = fs.readFileSync(path.join(__dirname, '../publicKey.pub'))
-
 app
   .use(cors())
   .use((ctx, next) => {
@@ -40,6 +40,8 @@ app
   // .use(PluginLoader(SystemConfig.System_plugin_path))
   .use(MainRoutes.routes())
   .use(MainRoutes.allowedMethods())
+  .use(AuthRoutes.routes())
+  .use(AuthRoutes.allowedMethods())
   .use(ErrorRoutes())
 
 if (env === 'development') { // logger
@@ -51,7 +53,6 @@ if (env === 'development') { // logger
     })
   })
 }
-
 app.listen(SystemConfig.API_server_port)
 
 console.log('Now start API server on port ' + SystemConfig.API_server_port + '...')

@@ -9,9 +9,20 @@ const DB = db.lkDatabase // 引入数据库
 const User = DB.import(userSchema) // 用sequelize的import方法引入表结构，实例化了admin
 
 // 查询
-const search = async (params) => {
-  const rdata = await User.findAll()
-  return rdata // 返回数据
+const searchById = async (params) => {
+  console.log('params', params)
+  const res = await User.findOne({where: {id: params.id}})
+  if (res) {
+    return {
+      errCode: '200',
+      errMsg: res
+    }
+  } else {
+    return {
+      errCode: '204',
+      errMsg: 'not found'
+    }
+  }
 }
 
 const login = async (params) => {
@@ -75,9 +86,29 @@ const register = async (params) => {
   }
 }
 
+// 查询接口根据username
+const getInfoByUsername = async (params) => {
+  console.log('params', params)
+  var res = await User.findOne({where: {username: params.username}})
+  if (res) {
+    return {
+      errCode: 200,
+      errMsg: '查询成功',
+      data: res
+    }
+  } else {
+    return {
+      errCode: 204,
+      errMsg: '未找到对应用户',
+      data: null
+    }
+  }
+}
+
 export default {
-  search,
+  searchById,
   login,
   checkUserName,
-  register
+  register,
+  getInfoByUsername
 }

@@ -7,7 +7,7 @@ import Register from '@/views/settings/register'
 
 // 主页模块
 import Main from '@/views/main'
-import chatRoom from '@/views/chat-room/chat-room'
+import chatRoom from '@/views/chat-room/chat-room.vue'
 Vue.use(Router)
 
 export default new Router({

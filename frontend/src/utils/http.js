@@ -8,7 +8,7 @@ function _fetch (options) {
   axios.defaults.baseURL = 'http://localhost:3000/auth/' // 本机服务器
   return new Promise((resolve, reject) => {
     const instance = axios.create()
-    instance.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token')
+    instance.defaults.headers.common['Authorization'] = 'Bearer ' + JSON.parse(localStorage.getItem('token')).data
     instance(options).then(response => {
       resolve(response)
     }).catch(error => {
@@ -43,7 +43,7 @@ export function _apiGet (uri, obj) {
   return _fetch({
     url: uri,
     method: 'get',
-    data: obj
+    params: obj
   })
 }
 /* 以下为不需要权限的请求方法 */
